@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import ProfilePage from './ProfilePage';
+import LoginPage from './LoginPage';
+import SignUpPage from './SignUpPage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  state = {
+    page: 'login'
+  }
+
+  redirect = (page) => {
+    // Shortcut if key and value are same name
+    // this.setState({ page: page })
+    this.setState({ page })
+  }
+
+  componentDidMount() {
+    if (localStorage.token) {
+      this.redirect('profile');
+    }
+  }
+
+  render() {
+
+    switch (this.state.page) {
+      case 'login':
+        return <LoginPage redirect={this.redirect}/>
+      case 'signup':
+        return <SignUpPage/>
+      case 'profile':
+        return <ProfilePage redirect={this.redirect}/>
+      default:
+        return <LoginPage/>
+    }
+  }
 }
-
-export default App;
