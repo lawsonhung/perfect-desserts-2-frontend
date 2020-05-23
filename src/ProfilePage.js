@@ -1,34 +1,26 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class ProfilePage extends Component {
-  state = {
-    username: ''
-  }
-
-  componentDidMount() {
-    fetch('http://localhost:3000/profile',{
-      headers: {
-        'Authorization': `Bearer ${localStorage.token}`
-      }
-    })
-    .then(res => res.json())
-    .then(user => this.setState({username: user.username}))
-  }
 
   handleClick = () => {
     localStorage.clear();
-    this.props.redirect('login');
+    // this.props.redirect('login');
+    this.props.routerProps.history.push('/login');
   }
 
   render() {
+    console.log("profile props: ", this.props);
+
     return (
       <div>
         <button onClick={this.handleClick}>Logout</button>
         {
-          this.state.username ?
-          <h1>Welcome {this.state.username}!</h1> :
+          this.props.username ?
+          <h1>Welcome {this.props.username}!</h1> :
           <h1>Getting your info... Loading...</h1>
         }
+        <Link to="/">Go to homepage</Link>
       </div>
     );
   }
