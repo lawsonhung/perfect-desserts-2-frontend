@@ -14,8 +14,10 @@ export default class SignUpPage extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-
-    fetch('http://localhost:3000/signup',{
+    // Local fetch
+    // fetch('http://localhost:3000/signup',{
+    // Heroku fetch
+    fetch('https://perfect-desserts-2-backend.herokuapp.com/signup',{
       method: 'POST',
       headers: {
         'Accept': 'application/json',
