@@ -18,13 +18,16 @@ class App extends Component {
   componentDidMount() {
     if (localStorage.token) {
       // Fetch profile
-      fetch('http://localhost:3000/profile',{
-      headers: {
-        'Authorization': `Bearer ${localStorage.token}`
-      }
-    })
-    .then(res => res.json())
-    .then(user => this.setState({username: user.username}))
+      // Local fetch
+      // fetch('http://localhost:3000/profile',{
+      // Heroku fetch
+      fetch('https://perfect-desserts-2-backend.herokuapp.com/profile',{
+        headers: {
+          'Authorization': `Bearer ${localStorage.token}`
+        }
+      })
+      .then(res => res.json())
+      .then(user => this.setState({username: user.username}))
     } else {
       // This is done with withRouter technology. Using HOC, you can user router props
       this.props.history.push('/login');
