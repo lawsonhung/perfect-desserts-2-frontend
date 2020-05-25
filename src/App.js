@@ -7,6 +7,7 @@ import SignUpPage from './SignUpPage';
 import FourOhFourPage from './FourOhFourPage';
 import MessagePage from './MessagePage';
 import { Switch, Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class App extends Component {
 
@@ -16,26 +17,35 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.token) {
-      // Fetch profile
-      // Local fetch
-      // fetch('http://localhost:3000/profile',{
-      // Heroku fetch
-      fetch('https://perfect-desserts-2-backend.herokuapp.com/profile',{
-        headers: {
-          'Authorization': `Bearer ${localStorage.token}`
-        }
-      })
-      .then(res => res.json())
-      .then(user => this.setState({username: user.username}))
+    // if (localStorage.token) {
+    if (this.props.token) {
+      this.storeUsername();
     } else {
       // This is done with withRouter technology. Using HOC, you can user router props
       this.props.history.push('/login');
     }
   }
 
+  storeUsername = () => {
+    // Fetch profile
+    // Local fetch
+    // fetch('http://localhost:3000/profile',{
+    // Heroku fetch
+    fetch('https://perfect-desserts-2-backend.herokuapp.com/profile',{
+      headers: {
+        // 'Authorization': `Bearer ${localStorage.token}`
+        'Authorization': `Bearer ${this.props.token}`
+      }
+    })
+    .then(res => res.json())
+    .then(user => {
+      this.props.storeUsername(user.username);
+      console.log('Username has been stored');
+    });
+  }
+
   render() {
-    console.log(this.props);
+    console.log('App props: ', this.props);
 
     return (
       <Switch>
@@ -46,24 +56,23 @@ class App extends Component {
           {/* Same as below, but below allows you to pass props */}
         <Route path={'/profile'} 
           render={(routerProps) => <ProfilePage 
-            username={this.state.username} 
             routerProps={routerProps} />} />
 
         <Route path={'/login'} 
           render={(routerProps) => <LoginPage 
-            username={this.state.username}
             password={this.state.password}
+            storeUsername={this.storeUsername}
             routerProps={routerProps} />} />
 
         <Route path={'/signup'}
           render={(routerProps) => <SignUpPage
             username={this.state.username}
             password={this.state.password}
+            storeUsername={this.storeUsername}
             routerProps={routerProps} />} />
 
         <Route path={'/messages/:text'} 
           render={(routerProps) => <MessagePage 
-          username={this.state.username}
           // {...routerProps} is syntactic sugar for routerProps={routerProps}. They are both the same
           {...routerProps} />} />
 
@@ -76,4 +85,18 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = (store) => {
+  return {
+    token: store.token
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeUsername: (username) => {
+      dispatch({ type: 'STORE_USERNAME', username: username })
+    }
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class ProfilePage extends Component {
+class ProfilePage extends Component {
 
   handleClick = () => {
-    localStorage.clear();
-    // this.props.redirect('login');
+    this.props.clearUsername();
+    this.props.clearToken();
+
     this.props.routerProps.history.push('/login');
   }
 
   render() {
-    console.log("profile props: ", this.props);
+    console.log("Profile props: ", this.props);
 
     return (
       <div>
@@ -25,3 +27,22 @@ export default class ProfilePage extends Component {
     );
   }
 }
+
+const mapStateToProps = (store) => {
+  return {
+    username: store.username
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    clearUsername: () => {
+      dispatch({ type: 'CLEAR_USERNAME' })
+    },
+    clearToken: () => {
+      dispatch({ type: 'CLEAR_TOKEN' })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage)

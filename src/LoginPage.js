@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
   state = {
-    username: '',
     password: ''
   }
   
@@ -26,10 +26,9 @@ export default class LoginPage extends Component {
     .then(res => res.json())
     .then(data => {
       if (data.token) {
-        localStorage.token = data.token;
-        console.log(this);
-        // debugger
-        // this.props.redirect('profile');
+        this.props.storeToken(data.token);
+        this.props.storeUsername();
+
         this.props.routerProps.history.push('/profile');
       }
     });
@@ -55,3 +54,20 @@ export default class LoginPage extends Component {
     );
   }
 }
+
+const mapStateToProps = (store) => {
+  return {
+    username: store.username,
+    token: store.token
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeToken: (token) => {
+      dispatch({ type: 'STORE_TOKEN', token: token })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

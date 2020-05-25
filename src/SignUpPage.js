@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class SignUpPage extends Component {
+class SignUpPage extends Component {
   Signup
 
   state = {
-    username: '',
     password: ''
   }
 
@@ -27,26 +27,49 @@ export default class SignUpPage extends Component {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
       if (data.token) {
-        localStorage.token = data.token;
-        console.log(this);
+        this.props.storeToken(data.token);
+        this.props.storeUsername();
+
         this.props.routerProps.history.push('/profile');
       }
-    });
+    })
+  }
+
+  handleClick = () => {
+    this.props.routerProps.history.push('/login');
   }
 
   render() {
+    console.log('Signup props: ', this.props);
+
     return (
       <div>
-        {/* <button>Switch to Login</button> */}
         <h1>Signup please!</h1>
         <form onSubmit={this.handleSubmit}>
           <input onChange={this.handleChange} value={this.state.username} type="text" name="username"/>
           <input onChange={this.handleChange} value={this.state.password} type="password" name="password"/>
           <input type="submit" value="Create account"/>
         </form>
+        <button onClick={this.handleClick}>I already have an account. Take me back to log in</button>
       </div>
     );
   }
 }
+
+const mapStateToProps = (store) => {
+  return {
+    username: store.username,
+    token: store.token
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    storeToken: (token) => {
+      dispatch({ type: 'STORE_TOKEN', token: token })
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpPage)
