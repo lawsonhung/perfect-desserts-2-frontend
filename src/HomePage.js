@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class HomePage extends Component {
+class HomePage extends Component {
 
   render() {
     console.log(this.props);
     return (
       <div>
-        Hi, I'm the HomePage!
+        Hi {this.props.username}, I'm the HomePage!
         <ul>
           <li><Link to='/profile'>Go to Profile</Link></li>
           <li><Link to='/login'>Go to Login</Link></li>
@@ -19,3 +20,11 @@ export default class HomePage extends Component {
   }
 
 }
+
+const mapStateToProps = (store) => {
+  return {
+    username: store.username
+  }
+}
+
+export default connect(mapStateToProps, null)(HomePage)

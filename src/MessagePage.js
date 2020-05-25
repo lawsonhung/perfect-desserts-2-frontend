@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class MessagePage extends Component {
+class MessagePage extends Component {
 
   render() {
     console.log("message props: ", this.props);
@@ -13,3 +14,11 @@ export default class MessagePage extends Component {
   }
 
 }
+
+const mapStateToProps = (store) => {
+  return {
+    username: store.username
+  }
+}
+
+export default connect(mapStateToProps, null)(MessagePage)
