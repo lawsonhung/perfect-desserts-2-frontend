@@ -12,11 +12,15 @@ import { connect } from 'react-redux';
 class App extends Component {
 
   state = {
-    username: '',
+    // username: '',
     // password: ''
   }
 
   componentDidMount() {
+    console.log('App mounted');
+    console.log(this.props);
+    console.log('App: What\s in store?', this.props.username, this.props.token);
+
     // if (localStorage.token) {
     if (this.props.token) {
       this.storeUsername();
@@ -39,8 +43,9 @@ class App extends Component {
     })
     .then(res => res.json())
     .then(user => {
-      this.props.storeUsername(user.username);
-      console.log('Username has been stored');
+      this.props.storeUsernameToRedux(user.username);
+      console.log('username stored');
+      console.log('After storing username, what\'s in store?', this.props.username, this.props.token);
     });
   }
 
@@ -60,14 +65,11 @@ class App extends Component {
 
         <Route path={'/login'} 
           render={(routerProps) => <LoginPage 
-            password={this.state.password}
             storeUsername={this.storeUsername}
             routerProps={routerProps} />} />
 
         <Route path={'/signup'}
           render={(routerProps) => <SignUpPage
-            username={this.state.username}
-            password={this.state.password}
             storeUsername={this.storeUsername}
             routerProps={routerProps} />} />
 
@@ -87,13 +89,14 @@ class App extends Component {
 
 const mapStateToProps = (store) => {
   return {
-    token: store.token
+    token: store.token,
+    username: store.username
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    storeUsername: (username) => {
+    storeUsernameToRedux: (username) => {
       dispatch({ type: 'STORE_USERNAME', username: username })
     }
   }
