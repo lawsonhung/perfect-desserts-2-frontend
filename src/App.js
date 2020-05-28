@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ProfilePage from './ProfilePage';
 import HomePage from './HomePage';
 import LoginPage from './LoginPage';
-// eslint-disable-next-line
 import SignUpPage from './SignUpPage';
 import FourOhFourPage from './FourOhFourPage';
 import MessagePage from './MessagePage';
