@@ -20,6 +20,9 @@ class App extends Component {
     console.log(this.props);
     console.log('App: What\s in store?', this.props.username, this.props.token);
 
+    // Refresh production fix
+    this.props.history.push('/');
+
     // if (localStorage.token) {
     if (this.props.token) {
       this.storeUsername();
