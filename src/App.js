@@ -18,10 +18,10 @@ class App extends Component {
   componentDidMount() {
     console.log('App mounted');
     console.log(this.props);
-    console.log('App: What\s in store?', this.props.username, this.props.token);
+    console.log('App: What\'s in store?', this.props.username, this.props.token);
 
     // Refresh production fix
-    this.props.history.push('/');
+    // this.props.history.push('/');
 
     // if (localStorage.token) {
     if (this.props.token) {
